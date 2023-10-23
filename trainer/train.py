@@ -74,9 +74,9 @@ def train(opt, show_number = 2, amp=False):
         model = torch.nn.DataParallel(model).to(device) 
         print(f'loading pretrained model from {opt.saved_model}')
         if opt.FT:
-            model.load_state_dict(pretrained_dict, strict=False)
+            model.load_state_dict(pretrained_dict, strict=False,  map_location=torch.device('cpu'))
         else:
-            model.load_state_dict(pretrained_dict)
+            model.load_state_dict(pretrained_dict,  map_location=torch.device('cpu'))
         if opt.new_prediction:
             model.module.Prediction = nn.Linear(model.module.SequenceModeling_output, opt.num_class)  
             for name, param in model.module.Prediction.named_parameters():
